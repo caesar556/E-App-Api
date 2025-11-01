@@ -6,11 +6,17 @@ const Roles = ['user', 'admin', 'seller'];
 
 const userSchema = new Schema(
   {
-    username: {
+    firstName: {
       type: String,
       required: [true, "firstName is required"],
-      minLength: [3, "must be at least 3 charcter"],
-      maxLength: [15, "Too long username"]
+      minLength: [2, "must be at least 2 charcter"],
+      maxLength: [15, "Too long first name"]
+    },
+    lastName: {
+      type: String,
+      required: [true, "lastName is required"],
+      minLength: [2, "must be at least 2 charcter"],
+      maxLength: [15, "Too long last name"]
     },
     email: {
       type: String,
@@ -31,7 +37,7 @@ const userSchema = new Schema(
       minLength: [8, "must be at least 8 charcter"],
       maxLength: [15, "Too long password"]
     },
-    passwordConfirm: {
+    /*passwordConfirm: {
       type: String,
       validate: {
         validator: function (value) {
@@ -43,7 +49,7 @@ const userSchema = new Schema(
       required: [true, "passwordConfirm is required"],
       maxLength: [15, "Too long password"]
 
-    },
+    },*/
     profileImage : {
       type : String,
       default: '../uploads/defaults/profile-image.jpg'
