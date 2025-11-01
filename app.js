@@ -33,7 +33,7 @@ app.use(mongoSanitize());
 //app.use(await morganLogger());
 
 app.use(cors({
-  origin: "http://localhost:8000",
+  origin: "*",
   credentials: true,
 }
 ));
