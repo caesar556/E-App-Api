@@ -13,7 +13,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import AppError from './utils/appError.js';
 import globalErrorHandler from './middleware/errorController.js';
-import { morganLogger } from './middleware/logger.js';
+//import { morganLogger } from './middleware/logger.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -30,7 +30,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(mongoSanitize());
 
-app.use(await morganLogger());
+//app.use(await morganLogger());
 
 app.use(cors({
   origin: "http://localhost:8000",
