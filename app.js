@@ -33,10 +33,10 @@ app.use(mongoSanitize());
 //app.use(await morganLogger());
 
 app.use(cors({
-  origin: "*",
-  credentials: true,
-}
-));
+  origin: '*',               
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+}));
 
 app.use((req, res, next) => {
   console.table({ 
