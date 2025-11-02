@@ -8,8 +8,8 @@ import { generateToken, generateRefreshToken } from '../utils/tokensGenerators.j
 
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "strict",
-  secure: process.env.NODE_ENV === "production"
+  sameSite: "lax",
+  secure: false
 }
 
 const sendResponse = async (res, user, code, next) => {

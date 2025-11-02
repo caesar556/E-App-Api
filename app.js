@@ -33,9 +33,10 @@ app.use(mongoSanitize());
 //app.use(await morganLogger());
 
 app.use(cors({
-  origin: '*',               
+  origin: 'https://4b9fbab8-2abe-4a7d-b0d9-2edbabb19f36-00-1fp7bm60f2nuh.picard.replit.dev',               
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true
 }));
 
 app.use((req, res, next) => {
