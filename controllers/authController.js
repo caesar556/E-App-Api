@@ -15,7 +15,7 @@ const cookieOptions = {
 const sendResponse = async (res, user, code, next) => {
   const accessToken = generateToken(user._id);
   const refreshToken = generateRefreshToken(user._id);
-   
+
   const accessTokenOptions = {
     ...cookieOptions,
     secure: process.env.NODE_ENV === "production",
@@ -26,7 +26,7 @@ const sendResponse = async (res, user, code, next) => {
     secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000
   }
-   
+
 
   const userUpdated = await User.findByIdAndUpdate(
     user._id,
@@ -40,6 +40,11 @@ const sendResponse = async (res, user, code, next) => {
 
   res.cookie("accessToken", accessToken, accessTokenOptions);
   res.cookie("jwt", refreshToken, refreshTokenOptions);
+  res.cookie("role", user.role, {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 10 * 60 * 1000
+  });
 
   res.status(code).json({
     Status: SUCCESS,
@@ -86,20 +91,20 @@ export const refresh = errorHandler(
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, async (err, decoded) => {
       if (err) return next(new AppError("Your token is not valid", 403));
-      
+
       const existingUser = await User.findOne({ _id: decoded.id, refreshToken });
-      
+
       if (!existingUser) return next(new AppError("Not found the user", 404));
 
       const newAccessToken = generateToken(existingUser._id);
-      
+
       const newTokenOptions = {
         ...cookieOptions,
         maxAge: 10 * 60 * 1000
       }
-      
+
       res.cookie("accessToken", newAccessToken, newTokenOptions);
-      
+
 
       return res.status(200).json({
         Status: SUCCESS,
@@ -124,6 +129,8 @@ export const logout = errorHandler(
     if (!existUser) {
       res.clearCookie('jwt', cookieOptions);
       res.clearCookie('accessToken', cookieOptions);
+      res.clearCookie("role", cookieOptions);
+      
       return res.status(204).json({ Status: SUCCESS });
     }
 

@@ -16,7 +16,7 @@ router.route('/sign-up')
   .post(signUp)
 
 router.route('/refresh-token')
-  .get(refresh)
+  .post(refresh)
 
 router.route('/logout')
   .post(logout)
