@@ -3,7 +3,8 @@ import {
   login,
   signUp,
   refresh,
-  logout
+  logout,
+  authMe
 } from '../controllers/authController.js';
 
 const router = express.Router();
@@ -16,7 +17,10 @@ router.route('/sign-up')
   .post(signUp)
 
 router.route('/refresh-token')
-  .post(refresh)
+  .get(refresh)
+  
+router.route('/me')
+  .get(authMe)
 
 router.route('/logout')
   .post(logout)

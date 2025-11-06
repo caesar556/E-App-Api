@@ -39,16 +39,17 @@ const sendResponse = async (res, user, code, next) => {
   user.password = undefined;
 
   res.cookie("accessToken", accessToken, accessTokenOptions);
-  res.cookie("jwt", refreshToken, refreshTokenOptions);
+  res.cookie("refreshToken", refreshToken, refreshTokenOptions);
   res.cookie("role", user.role, {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 10 * 60 * 1000
   });
 
+
   res.status(code).json({
-    Status: SUCCESS,
-    Data: { user }
+    status: SUCCESS,
+    data: { user }
   })
 
 }
@@ -82,11 +83,9 @@ export const checkIfAdmin = errorHandler(
   }
 );
 
-
-
 export const refresh = errorHandler(
   async (req, res, next) => {
-    const refreshToken = req.cookies.jwt;
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return next(new AppError("Sorry you are not logged in, log in and try again", 401));
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, async (err, decoded) => {
@@ -107,8 +106,7 @@ export const refresh = errorHandler(
 
 
       return res.status(200).json({
-        Status: SUCCESS,
-        Data: { existingUser }
+        status: SUCCESS
       })
     });
   }
@@ -116,29 +114,51 @@ export const refresh = errorHandler(
 
 export const logout = errorHandler(
   async (req, res, next) => {
-    if (!req.cookies.jwt) {
-      res.clearCookie('jwt', cookieOptions);
+    if (!req.cookies.refreshToken) {
+      res.clearCookie('refreshToken', cookieOptions);
       res.clearCookie('accessToken', cookieOptions);
       return res.status(204).json({ Status: SUCCESS });
     }
 
-    const refreshToken = req.cookies.jwt;
+    const refreshToken = req.cookies.refreshToken;
 
     const existUser = await User.findOne({ refreshToken });
 
     if (!existUser) {
-      res.clearCookie('jwt', cookieOptions);
+      res.clearCookie('refreshToken', cookieOptions);
       res.clearCookie('accessToken', cookieOptions);
       res.clearCookie("role", cookieOptions);
-      
+
       return res.status(204).json({ Status: SUCCESS });
     }
 
     await User.findByIdAndUpdate(existUser._id, { refreshToken: "" }, { new: true });
 
-    res.status(200).json({ Status: SUCCESS })
+    res.status(200).json({ status: SUCCESS })
   }
 );
+
+export const authMe = errorHandler(
+  async (req, res, next) => {
+
+    const token = req.cookies.accessToken;
+
+    if (!token) return next(new AppError("user not logged in", 401));
+
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) return next(new AppError("Invalid token", 401));
+
+      const existingUser = await User.findById(decoded.id).select("-password");
+      if (!existingUser) return next(AppError("User not found", 404));
+
+      res.status(200).json({
+        status: SUCCESS,
+        data: { user: existingUser }
+      });
+
+    });
+  }
+)
 
 
 export const protect = errorHandler(
