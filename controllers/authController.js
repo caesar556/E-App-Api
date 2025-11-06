@@ -9,7 +9,7 @@ import { generateToken, generateRefreshToken } from '../utils/tokensGenerators.j
 const cookieOptions = {
   httpOnly: true,
   sameSite: "None",
-  secure: false,
+  secure: true,
   path: "/"
 }
 
@@ -86,14 +86,20 @@ export const checkIfAdmin = errorHandler(
 export const refresh = errorHandler(
   async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;
+    console.log("refresh token", refreshToken);
     if (!refreshToken) return next(new AppError("Sorry you are not logged in, log in and try again", 401));
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, async (err, decoded) => {
-      if (err) return next(new AppError("Your token is not valid", 403));
+      if (err) {
+        return next(new AppError("Your token is not valid", 403));
+        console.log("error", err);
+      }
 
       const existingUser = await User.findOne({ _id: decoded.id, refreshToken });
 
       if (!existingUser) return next(new AppError("Not found the user", 404));
+      console.log("exist user", existingUser);
+      console.log("decoded", decoded)
 
       const newAccessToken = generateToken(existingUser._id);
 
