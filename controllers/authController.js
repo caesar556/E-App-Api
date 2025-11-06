@@ -8,8 +8,9 @@ import { generateToken, generateRefreshToken } from '../utils/tokensGenerators.j
 
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "lax",
-  secure: false
+  sameSite: "None",
+  secure: false,
+  path: "/"
 }
 
 const sendResponse = async (res, user, code, next) => {
@@ -42,7 +43,6 @@ const sendResponse = async (res, user, code, next) => {
   res.cookie("refreshToken", refreshToken, refreshTokenOptions);
   res.cookie("role", user.role, {
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
     maxAge: 10 * 60 * 1000
   });
 
