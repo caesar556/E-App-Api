@@ -4,7 +4,9 @@ import { authRouter } from './routes/authRouter.js';
 import {
   categoryRouter,
   productRouter,
-  cartRouter
+  cartRouter,
+  paymentRouter,
+  orderRouter
 } from './routes/shop/index.js';
 import mongoSanitize from 'express-mongo-sanitize';
 import cookieParser from 'cookie-parser';
@@ -33,15 +35,15 @@ app.use(mongoSanitize());
 //app.use(await morganLogger());
 
 app.use(cors({
-  origin: 'https://4b9fbab8-2abe-4a7d-b0d9-2edbabb19f36-00-1fp7bm60f2nuh.picard.replit.dev',               
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
+  origin: 'https://4b9fbab8-2abe-4a7d-b0d9-2edbabb19f36-00-1fp7bm60f2nuh.picard.replit.dev',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
 app.use((req, res, next) => {
-  console.table({ 
-    path: req.url, 
+  console.table({
+    path: req.url,
     method: req.method
   })
   next();
@@ -53,6 +55,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/payment', paymentRouter);
 
 
 //  Error Handleing

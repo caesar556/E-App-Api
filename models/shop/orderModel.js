@@ -2,45 +2,30 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+    userId: {
+      type: String,
+      required: [true, "User Id is required"]
     },
-    orderItems: [
+    items: [
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        name: { type: String, required: true },
-        qty: { type: Number, required: true },
-        price: { type: Number, required: true },
-        image: { type: String },
-      },
+        productId: String,
+        name: String,
+        qty: Number,
+        price: Number
+      }
     ],
-    shippingAddress: {
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+    amount : Number,
+    shippingAdderss: String,
+    status: {
+      type: String,
+      enum: ["pending", "paid", "shipped", "delivered", "cancelled"],
+      default: "pending"
     },
     paymentMethod: {
-      type: String,
-      required: true,
-      enum: ["Cash", "Card"],
-    },
-    itemsPrice: { type: Number, required: true },
-    shippingPrice: { type: Number, required: true },
-    taxPrice: { type: Number, required: true },
-    totalPrice: { type: Number, required: true },
-
-    isPaid: { type: Boolean, default: false },
-    paidAt: { type: Date },
-
-    isDelivered: { type: Boolean, default: false },
-    deliveredAt: { type: Date },
+      method: String,
+      transactionId: String
+    }
+    
   },
   { timestamps: true }
 );
