@@ -18,7 +18,7 @@ const productSchema = new Schema(
     },
     totalStock:{
       type: Number,
-      required: [true, "Total Stock is required"],
+      // required: [true, "Total Stock is required"],
     },
     price:{
       type: Number,
@@ -30,8 +30,15 @@ const productSchema = new Schema(
     discount:{
       type: Number,
     },
-    shortDesc:{
+    imageCover: {
       type: String
+    },
+    images: [String],
+    rateing: {
+      type: Number 
+    },
+    reviews: {
+      type: Number
     }
   },
   { timestamps: true }
@@ -40,7 +47,7 @@ const productSchema = new Schema(
 productSchema.pre(/^find/, function(next) {
   this.populate({
     path: "category",
-    select: "name slug"
+    select: "name"
   });
   next();
 })

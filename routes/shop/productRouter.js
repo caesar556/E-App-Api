@@ -7,18 +7,27 @@ import {
   deleteProduct,
   getProductsByCategories
 } from '../../controllers/shop/productController.js';
+import upload from "../../middleware/multer.js";
 
 const router = express.Router();
 
-router.route('/')
-  .post(createProduct)
+router
+  .route('/')
   .get(getAllProducts)
+  .post(
+    upload.fields([
+      { name: "imageCover", maxCount: 1 },
+      { name: "images", maxCount: 4 }
+    ]),
+    createProduct
+  );
 
-router.route('/:id')
+router
+  .route('/:id')
   .get(getSingleProduct)
-  .delete(deleteProduct)
+  .patch(updateProduct)
+  .delete(deleteProduct);
 
-router.route('/category/:slug')
-  .get(getProductsByCategories)
+router.route('/category/:slug').get(getProductsByCategories);
 
 export const productRouter = router;
