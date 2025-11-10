@@ -9,7 +9,7 @@ import { generateToken, generateRefreshToken } from '../utils/tokensGenerators.j
 const cookieOptions = {
   httpOnly: true,
   sameSite: "None",
-  secure: false,
+  secure: true,
   path: "/"
 }
 
@@ -19,12 +19,12 @@ const sendResponse = async (res, user, code, next) => {
 
   const accessTokenOptions = {
     ...cookieOptions,
-    //    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 10 * 60 * 1000
   }
   const refreshTokenOptions = {
     ...cookieOptions,
-    //   secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000
   }
 
