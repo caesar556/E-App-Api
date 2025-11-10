@@ -13,7 +13,7 @@ const router = express.Router();
 router.route('/login')
   .post(login)
 
-router.route('/sign-up')
+router.route('/register')
   .post(signUp)
 
 router.route('/refresh-token')
