@@ -29,7 +29,6 @@ app.use(express.json({ limit: '10kb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-app.use(cookieParser());
 app.use(mongoSanitize());
 
 //app.use(await morganLogger());
@@ -48,6 +47,8 @@ app.use((req, res, next) => {
   })
   next();
 })
+
+app.use(cookieParser());
 
 //  Routes 
 app.use('/api/user', userRouter);

@@ -86,7 +86,6 @@ export const checkIfAdmin = errorHandler(
 export const refresh = errorHandler(
   async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;
-    console.log("refresh token", refreshToken);
     if (!refreshToken) return next(new AppError("Sorry you are not logged in, log in and try again", 401));
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, async (err, decoded) => {
@@ -170,6 +169,7 @@ export const authMe = errorHandler(
 export const protect = errorHandler(
   async (req, res, next) => {
     const token = req.cookies.accessToken;
+    console.log(token);
 
     if (!token) return next(new AppError("You're not logged in, login to get access", 401));
 

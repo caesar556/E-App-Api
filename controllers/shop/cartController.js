@@ -6,7 +6,7 @@ import { Product } from '../../models/shop/productModel.js';
 import { User } from '../../models/userModel.js';
 import { SUCCESS } from '../../utils/httpStatus.js';
 
-export const getCart = errorHandler(
+export const getCart = errorHandler( 
   async (req, res, next) => {
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
     if (!cart) {
@@ -45,6 +45,7 @@ export const clearCart = errorHandler(
 export const addToCart = errorHandler(
   async (req, res, next) => {
     const userId = req.user._id;
+    
     const { productId, quantity } = req.body;
 
     const existProduct = await Product.findById(productId);
