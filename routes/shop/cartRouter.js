@@ -2,7 +2,8 @@ import express from 'express';
 import {
   addToCart,
   getCart,
-  clearCart
+  clearCart,
+  removeFromCart
 } from '../../controllers/shop/cartController.js';
 
 import { protect } from '../../controllers/authController.js';
@@ -15,6 +16,9 @@ router.route('/')
   .post(addToCart)
   .get(getCart)
   .delete(clearCart)
+
+router.route('/:productId')
+  .delete(removeFromCart)
 
 
 
