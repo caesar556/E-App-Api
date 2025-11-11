@@ -52,7 +52,6 @@ const userSchema = new Schema(
     },*/
     profileImage : {
       type : String,
-      default: '../uploads/defaults/profile-image.jpg'
     },
     refreshToken: {
       type: String,

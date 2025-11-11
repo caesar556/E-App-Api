@@ -169,7 +169,6 @@ export const authMe = errorHandler(
 export const protect = errorHandler(
   async (req, res, next) => {
     const token = req.cookies.accessToken;
-    console.log(token);
 
     if (!token) return next(new AppError("You're not logged in, login to get access", 401));
 
