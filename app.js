@@ -33,8 +33,10 @@ app.use(mongoSanitize());
 
 //app.use(await morganLogger());
 
+const production = 'https://e-app-v01.vercel.app';
+
 app.use(cors({
-  origin: 'https://e-app-v01.vercel.app',
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
