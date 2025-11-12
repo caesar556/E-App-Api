@@ -33,12 +33,25 @@ app.use(mongoSanitize());
 
 //app.use(await morganLogger());
 
-const production = 'https://e-app-v01.vercel.app';
+//const production = 'https://e-app-v01.vercel.app';
 
-const dev = 'https://4b9fbab8-2abe-4a7d-b0d9-2edbabb19f36-00-1fp7bm60f2nuh.picard.replit.dev';
+//const dev = 'https://4b9fbab8-2abe-4a7d-b0d9-2edbabb19f36-00-1fp7bm60f2nuh.picard.replit.dev';
+
+const allowedOrigins = [
+  "https://e-app-v01.vercel.app",
+  "https://4b9fbab8-2abe-4a7d-b0d9-2edbabb19f36-00-1fp7bm60f2nuh.picard.replit.dev"
+]
 
 app.use(cors({
-  origin: dev,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
