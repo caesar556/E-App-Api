@@ -19,6 +19,11 @@ router
       { name: "imageCover", maxCount: 1 },
       { name: "images", maxCount: 4 }
     ]),
+    (req, res, next) => {
+      console.log("Before body parse");
+      console.log(req.body);
+      next();
+    },
     createProduct
   );
 

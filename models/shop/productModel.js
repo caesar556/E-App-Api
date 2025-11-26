@@ -34,6 +34,7 @@ const productSchema = new Schema(
       type: String
     },
     images: [String],
+    
     rateing: {
       type: Number 
     },
@@ -41,6 +42,7 @@ const productSchema = new Schema(
       type: Number
     }
   },
+  
   { timestamps: true }
 );
 

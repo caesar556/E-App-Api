@@ -23,13 +23,13 @@ export const updateProduct = updateDoc(Product);
 export const createProduct = errorHandler(
   async (req, res, next) => {
     const { title, description, category, totalStock, price, salePrice, discount, reviews, rateing, imageCover, images } = req.body;
-
+    console.log("body", req.body);
     if (!req.files?.imageCover) {
       return next(new AppError("image cover required"));
     }
 
     const imageCoverUrl = await uploadToCloudinary(req.files.imageCover[0].path)
-
+    console.log("imageCoverUrl", imageCoverUrl);
     let imagesUrls = [];
 
     if (req.files?.images) {
@@ -37,7 +37,11 @@ export const createProduct = errorHandler(
         req.files.images.map((file) => uploadToCloudinary(file.path))
       );
     }
+    console.log("req", req.files);
 
+    if (!category || !mongoose.Types.ObjectId.isValid(category)) {
+      return next(new AppError("Valid category ID is required", 400));
+    }
     const product = await Product.create({
       title,
       description,
@@ -49,7 +53,12 @@ export const createProduct = errorHandler(
       reviews,
       discount,
       imageCover: imageCoverUrl,
-      images : imagesUrls
+      images: imagesUrls
+    });
+
+    await product.populate({
+      path: "category",
+      select: "name"
     });
 
     res.status(201).json({
@@ -58,6 +67,8 @@ export const createProduct = errorHandler(
     });
   }
 )
+
+
 
 export const deleteProduct = deleteDoc(Product);
 

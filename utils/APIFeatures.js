@@ -1,7 +1,7 @@
 import { Query } from "mongoose";
 
 
-class ApiFeatures{
+class ApiFeatures {
   constructor(queryString, query) {
     this.queryString = queryString;
     this.query = query;
@@ -11,6 +11,11 @@ class ApiFeatures{
     let queryObj = { ...this.queryString };
     const excludeFields = ["page", "sort", "fields", "limit"];
     excludeFields.forEach((e) => delete queryObj[e]);
+
+    if (queryObj.category === "all") {
+      delete queryObj.category;
+    }
+    
     let queryStr = JSON.stringify(queryObj);
 
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
@@ -30,7 +35,7 @@ class ApiFeatures{
     }
     return this;
   }
-  
+
   limitFields() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(',').join(' ');
@@ -41,7 +46,7 @@ class ApiFeatures{
     }
     return this;
   }
-  
+
   paginate() {
     const page = this.queryString.page * 1 || 1;
     const limit = this.queryString.limit * 1 || 10;

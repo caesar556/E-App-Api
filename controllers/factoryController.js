@@ -60,10 +60,10 @@ export const getAllDoc = (model) => errorHandler(
     const totalDocs = await model.countDocuments();
     
     const apiFeatures = await new ApiFeatures(req.query, model.find())
-    .limitFields()
-    .paginate()
     .filter()
     .sort()
+    .limitFields()
+    .paginate()
     
     const docs = await apiFeatures.query;
     
