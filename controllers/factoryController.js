@@ -57,6 +57,7 @@ export const updateDoc = (model) => errorHandler(
 
 export const getAllDoc = (model) => errorHandler(
   async (req, res) => {
+    console.log("req", req.query);
     const totalDocs = await model.countDocuments();
     
     const apiFeatures = await new ApiFeatures(req.query, model.find())

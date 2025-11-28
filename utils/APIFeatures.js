@@ -9,19 +9,37 @@ class ApiFeatures {
 
   filter() {
     let queryObj = { ...this.queryString };
+
     const excludeFields = ["page", "sort", "fields", "limit"];
     excludeFields.forEach((e) => delete queryObj[e]);
 
-    if (queryObj.category === "all") {
-      delete queryObj.category;
-    }
-    
-    let queryStr = JSON.stringify(queryObj);
+    let mongoFilter = {};
 
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    Object.keys(queryObj).forEach((key) => {
+      const value = queryObj[key];
 
-    this.query = this.query.find(JSON.parse(queryStr));
+      if (key.includes("[") && key.includes("]")) {
+        const field = key.split("[")[0]; // price
+        const operator = key.split("[")[1].replace("]", ""); // gte
 
+        if (!mongoFilter[field]) mongoFilter[field] = {};
+        mongoFilter[field][`$${operator}`] = Number(value);
+      }
+
+      else if (typeof value === "object") {
+        mongoFilter[key] = {};
+
+        Object.keys(value).forEach((op) => {
+          mongoFilter[key][`$${op}`] = Number(value[op]);
+        });
+      }
+
+      else {
+        mongoFilter[key] = value;
+      }
+    });
+
+    this.query = this.query.find(mongoFilter);
     return this;
   }
 
