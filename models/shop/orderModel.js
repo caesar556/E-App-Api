@@ -8,14 +8,17 @@ const orderSchema = new mongoose.Schema(
     },
     items: [
       {
-        productId: String,
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
         name: String,
         qty: Number,
         price: Number
       }
     ],
-    amount : Number,
-    shippingAdderss: String,
+    amount: Number,
+    shippingAddress: String,
     status: {
       type: String,
       enum: ["pending", "paid", "shipped", "delivered", "cancelled"],
@@ -25,11 +28,10 @@ const orderSchema = new mongoose.Schema(
       method: String,
       transactionId: String
     }
-    
   },
   { timestamps: true }
 );
 
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 
 export default Order;
