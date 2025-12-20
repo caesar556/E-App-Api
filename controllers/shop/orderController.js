@@ -1,13 +1,15 @@
 import { errorHandler } from "../../middleware/errorHandler.js";
 import Order from "../../models/shop/orderModel.js";
-import { SUCCESS } from "../../utils/httpStatus.js"
+import { SUCCESS } from "../../utils/httpStatus.js";
+import { getAllDoc } from "../factoryController.js";
+
 
 export const createOrder = errorHandler(
   async (req, res) => {
     const { userId, amount, items, shippingAdderss } = req.body;
 
     const order = await Order.create({
-      userId,
+      userId: req.user._id,
       amount,
       items,
       shippingAdderss,
@@ -21,3 +23,6 @@ export const createOrder = errorHandler(
 
   }
 )
+
+
+export const getAllOrder = getAllDoc(Order);

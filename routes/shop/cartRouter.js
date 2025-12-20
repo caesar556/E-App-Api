@@ -10,7 +10,7 @@ import { protect } from '../../controllers/authController.js';
 
 const router = express.Router();
 
-router.use(protect)
+router.use(protect);
 
 router.route('/')
   .post(addToCart)

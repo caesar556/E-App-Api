@@ -5,7 +5,6 @@ import {
   deleteUser,
   updateUser,
   getOneUser,
-  uploadProfileImage
 } from '../controllers/userController.js';
 
 import { protect } from '../controllers/authController.js';
@@ -19,8 +18,8 @@ router.route('/')
   .get(getAllUsers)
 
 
-router.route('/image')
-  .post(uploadProfileImage)
+// router.route('/image')
+//   .post(uploadProfileImage)
 
 router.route('/:id')
   .get(getOneUser)

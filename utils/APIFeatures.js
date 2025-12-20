@@ -19,8 +19,8 @@ class ApiFeatures {
       const value = queryObj[key];
 
       if (key.includes("[") && key.includes("]")) {
-        const field = key.split("[")[0]; // price
-        const operator = key.split("[")[1].replace("]", ""); // gte
+        const field = key.split("[")[0]; 
+        const operator = key.split("[")[1].replace("]", "");
 
         if (!mongoFilter[field]) mongoFilter[field] = {};
         mongoFilter[field][`$${operator}`] = Number(value);

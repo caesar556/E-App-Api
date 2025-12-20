@@ -56,8 +56,9 @@ export const webhook = async (req, res) => {
     console.log("❌ Invalid signature");
     return res.status(400).send(`Webhook Error: ${err.message}`)
   }
-
   if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+
     const orderId = session.metadata.orderId;
     const paymentIntent = session.payment_intent;
 
@@ -66,13 +67,11 @@ export const webhook = async (req, res) => {
       paymentInfo: {
         transactionId: paymentIntent,
         method: "Stripe",
-      }
+      },
     });
-
-    console.log("✅ Order updated to PAID");
   }
 
-  res.stauts(200).json({
+  res.status(200).json({
     status: SUCCESS,
     received: true
   })

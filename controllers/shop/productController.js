@@ -23,7 +23,7 @@ export const updateProduct = updateDoc(Product);
 export const createProduct = errorHandler(
   async (req, res, next) => {
     const { title, description, category, totalStock, price, salePrice, discount, reviews, rateing, imageCover, images } = req.body;
-    console.log("body", req.body);
+
     if (!req.files?.imageCover) {
       return next(new AppError("image cover required"));
     }
@@ -37,7 +37,7 @@ export const createProduct = errorHandler(
         req.files.images.map((file) => uploadToCloudinary(file.path))
       );
     }
-    console.log("req", req.files);
+
 
     if (!category || !mongoose.Types.ObjectId.isValid(category)) {
       return next(new AppError("Valid category ID is required", 400));
