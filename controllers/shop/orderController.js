@@ -4,25 +4,33 @@ import { SUCCESS } from "../../utils/httpStatus.js";
 import { getAllDoc, deleteDoc } from "../factoryController.js";
 
 
-export const createOrder = errorHandler(
-  async (req, res) => {
-    const { userId, amount, items, shippingAdderss } = req.body;
-    console.log("userId", req.user._id);
-    const order = await Order.create({
-      userId: req.user._id,
-      amount,
-      items,
-      shippingAdderss,
-      status: "pending"
-    });
+export const createOrder = errorHandler(async (req, res) => {
+  const {  items, shippingAdderss } = req.body;
+  const orderItems = items.map(cartItem => ({
+    productId: cartItem.product._id,
+    name: cartItem.product.title,
+    price: cartItem.product.price,
+    qty: cartItem.quantity,
+  }));
 
-    res.status(200).json({
-      status: SUCCESS,
-      order
-    });
+  const amount = orderItems.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
 
-  }
-)
+  const order = await Order.create({
+    userId: req.user._id,
+    items: orderItems,
+    amount,
+    shippingAdderss,
+    status: "pending",
+  });
+
+  res.status(201).json({
+    status: SUCCESS,
+    data: order
+  });
+});
 
 
 export const getAllOrder = getAllDoc(Order);
